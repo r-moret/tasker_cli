@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+  "tasker_cli"
+]
+
+[project]
+name = "tasker_cli"
+version = "0.0.1"
+keywords = ["terminal", "cli", "tasks", "tracker", "rich"]
+authors = [
+  { name="Rafael Moret", email="rafaelmoretgalan@gmail.com" },
+]
+description = "A small library to create pretty tables to track tasks status on the terminal."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  "rich"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/r-moret/tasker_cli"
+"Bug Tracker" = "https://github.com/r-moret/tasker_cli/issues"
