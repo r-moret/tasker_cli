@@ -9,7 +9,7 @@ packages = [
 
 [project]
 name = "tasker_cli"
-version = "0.0.1"
+version = "0.0.2"
 keywords = ["terminal", "cli", "tasks", "tracker", "rich"]
 authors = [
   { name="Rafael Moret", email="rafaelmoretgalan@gmail.com" },
