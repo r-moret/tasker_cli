@@ -12,6 +12,7 @@ class TaskTable:
     STATUS_PENDING = "PENDING"
     STATUS_ON_PROGRESS = Status("[yellow]ON PROGRESS", spinner_style="yellow")
     STATUS_COMPLETE = "[green]COMPLETE"
+    STATUS_ERROR = "[red]ERROR"
 
     def __init__(self, title: str, tasks: list) -> None:
         table = Table(show_lines=True, show_edge=False, box=HEAVY_HEAD)
@@ -39,8 +40,18 @@ class TaskTable:
     def start_task(self, index: int):
         self.table.columns[0]._cells[index] = TaskTable.STATUS_ON_PROGRESS
 
-    def end_task(self, index: int):
-        self.table.columns[0]._cells[index] = TaskTable.STATUS_COMPLETE
+    def end_task(self, index: int, result: str = "complete"):
+        RESULTS = {
+            "complete": TaskTable.STATUS_COMPLETE,
+            "error": TaskTable.STATUS_ERROR,
+        }
+
+        if result not in RESULTS:
+            raise ValueError(
+                f"Unknown result status for terminating task {index}"
+            )
+
+        self.table.columns[0]._cells[index] = RESULTS[result]
 
     def __enter__(self):
         self.live = Live(self.layout, refresh_per_second=12.5)
