@@ -34,9 +34,6 @@ class TaskTable:
         self.table = table
         self.live = None
 
-    def add_task(self, task: str):
-        self.table.add_row(TaskTable.STATUS_PENDING, task)
-
     def start_task(self, index: int):
         self.table.columns[0]._cells[index] = TaskTable.STATUS_ON_PROGRESS
 
