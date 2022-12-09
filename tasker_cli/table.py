@@ -9,10 +9,12 @@ from rich.table import Table
 
 
 class TaskTable:
-    STATUS_PENDING = "PENDING"
-    STATUS_ON_PROGRESS = Status("[yellow]ON PROGRESS", spinner_style="yellow")
-    STATUS_COMPLETE = "[green]COMPLETE"
-    STATUS_ERROR = "[red]ERROR"
+    STATUS = {
+        "PENDING": "PENDING",
+        "ON_PROGRESS": Status("[yellow]ON PROGRESS", spinner_style="yellow"),
+        "COMPLETE": "[green]COMPLETE",
+        "ERROR": "[red]ERROR",
+    }
 
     def __init__(self, title: str, tasks: list) -> None:
         table = Table(show_lines=True, show_edge=False, box=HEAVY_HEAD)
@@ -28,19 +30,19 @@ class TaskTable:
         table.add_column("TASK", justify="center", width=40)
 
         for task in tasks:
-            table.add_row(TaskTable.STATUS_PENDING, task)
+            table.add_row(TaskTable.STATUS["PENDING"], task)
 
         self.layout = layout
         self.table = table
         self.live = None
 
     def start_task(self, index: int):
-        self.table.columns[0]._cells[index] = TaskTable.STATUS_ON_PROGRESS
+        self.table.columns[0]._cells[index] = TaskTable.STATUS["ON_PROGRESS"]
 
     def end_task(self, index: int, result: str = "complete"):
         RESULTS = {
-            "complete": TaskTable.STATUS_COMPLETE,
-            "error": TaskTable.STATUS_ERROR,
+            "complete": TaskTable.STATUS["COMPLETE"],
+            "error": TaskTable.STATUS["ERROR"],
         }
 
         if result not in RESULTS:
