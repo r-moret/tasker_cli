@@ -6,6 +6,7 @@ from rich.padding import Padding
 from rich.panel import Panel
 from rich.status import Status
 from rich.table import Table
+from .task import Task
 
 
 class TaskTable:
@@ -16,7 +17,7 @@ class TaskTable:
         "ERROR": "[red]ERROR",
     }
 
-    def __init__(self, title: str, tasks: list) -> None:
+    def __init__(self, title: str, tasks: list[Task]) -> None:
         table = Table(show_lines=True, show_edge=False, box=HEAVY_HEAD)
         layout = Layout(
             Align.center(
@@ -30,7 +31,7 @@ class TaskTable:
         table.add_column("TASK", justify="center", width=40)
 
         for task in tasks:
-            table.add_row(TaskTable.STATUS["PENDING"], task)
+            table.add_row(TaskTable.STATUS["PENDING"], task.title)
 
         self.layout = layout
         self.table = table

@@ -1,11 +1,11 @@
-from tasker_cli import TaskTable
+from tasker_cli import TaskTable, Task
 import time
 
 with TaskTable(
     title="TASK TABLE", 
     tasks=[
-        "Do some stuff", 
-        "And then more boring stuff"
+        Task("Do some stuff"), 
+        Task("And then more boring stuff"),
     ],
 ) as task_table:
     task_table.start_task(0)

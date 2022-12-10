@@ -1,14 +1,14 @@
 import sys
 import time
 
-from tasker_cli import TaskTable
+from tasker_cli import TaskTable, Task
 
 with TaskTable(
     title="TASK TABLE",
     tasks=[
-        "Do some stuff",
-        "Probably failing stuff",
-        "More stuff that is not going to be executed",
+        Task("Do some stuff"),
+        Task("Probably failing stuff"),
+        Task("More stuff that is not going to be executed"),
     ],
 ) as task_table:
     task_table.start_task(0)
