@@ -1,11 +1,13 @@
 from rich.align import Align
 from rich.box import HEAVY_HEAD
+from rich.columns import Columns
 from rich.layout import Layout
 from rich.live import Live
 from rich.padding import Padding
 from rich.panel import Panel
 from rich.status import Status
 from rich.table import Table
+
 from .task import Task
 
 
@@ -30,15 +32,38 @@ class TaskTable:
         table.add_column("STATUS", justify="center", width=20)
         table.add_column("TASK", justify="center", width=40)
 
-        for task in tasks:
-            table.add_row(TaskTable.STATUS["PENDING"], task.title)
+        if any([task.subtasks for task in tasks]):
+            table.add_column("SUBTASK", justify="center", width=60)
 
+        for task in tasks:
+            if task.subtasks:
+                table.add_row(
+                    TaskTable.STATUS["PENDING"], task.title, task.subtasks[0]
+                )
+            else:
+                table.add_row(TaskTable.STATUS["PENDING"], task.title)
+
+        self.tasks = tasks
         self.layout = layout
         self.table = table
         self.live = None
 
-    def start_task(self, index: int):
+    def start_task(self, index: int, subtask_index: int = 0):
         self.table.columns[0]._cells[index] = TaskTable.STATUS["ON_PROGRESS"]
+
+        if self.tasks[index].subtasks:
+            self.table.columns[2]._cells[index] = Align.center(
+                Columns(
+                    [
+                        self.tasks[index].subtasks[subtask_index],
+                        Status(
+                            status="",
+                            spinner="simpleDotsScrolling",
+                            spinner_style="white",
+                        ),
+                    ]
+                )
+            )
 
     def end_task(self, index: int, result: str = "complete"):
         RESULTS = {
@@ -52,6 +77,28 @@ class TaskTable:
             )
 
         self.table.columns[0]._cells[index] = RESULTS[result]
+
+        if self.tasks[index].subtasks:
+            self.table.columns[2]._cells[index] = (
+                self.table.columns[2]._cells[index].renderable.renderables[0]
+            )
+
+    def advance_task(self, index: int, subtask_index: int):
+        if self.tasks[index].subtasks:
+            self.table.columns[2]._cells[index] = Align.center(
+                Columns(
+                    [
+                        self.tasks[index].subtasks[subtask_index],
+                        Status(
+                            status="",
+                            spinner="simpleDotsScrolling",
+                            spinner_style="white",
+                        ),
+                    ]
+                )
+            )
+        else:
+            raise ValueError("This task cannot advance, it has no subtasks!")
 
     def __enter__(self):
         self.live = Live(self.layout, refresh_per_second=12.5)
